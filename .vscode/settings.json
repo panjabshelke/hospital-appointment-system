@@ -1,0 +1,7 @@
+{
+    "sync-rsync.local": "/panjab/Personal_Documents/Project/hospital-appointment-system",
+    "sync-rsync.remote": "/var/www/html/hospital-appointment-system",
+    "sync-rsync.onLoadIndividual": true,
+    "sync-rsync.onSave": true,
+    "sync-rsync.onSaveIndividual": true
+}
