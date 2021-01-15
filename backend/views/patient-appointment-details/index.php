@@ -1,5 +1,6 @@
 <?php
 
+use kartik\date\DatePicker;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
@@ -32,7 +33,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'branch_name',
             'patient_name',
             'patient_contact_no',
-            'available_date',
+            // 'available_date',
+            [
+                'attribute' => 'available_date',
+                'filter' => DatePicker::widget([
+                    'model'=>$searchModel,
+                    'type' => DatePicker::TYPE_COMPONENT_APPEND,
+                    'attribute'=>'available_date',
+                    'pluginOptions' => [
+                        'autoclose'=>true,
+                        'format' => 'yyyy-mm-dd'
+                    ],
+                ]),
+                'format' => 'html',
+            ],
             'available_time_slot',
             //'slot_type',
             // 'booking_status',

@@ -1,5 +1,6 @@
 <?php
 
+use kartik\date\DatePicker;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
@@ -28,7 +29,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'patient_email:email',
             //'doctor_prescription:ntext',
             'created_at',
-            'next_follow_up_date',
+            // 'next_follow_up_date',
+            [
+                'attribute' => 'next_follow_up_date',
+                'filter' => DatePicker::widget([
+                    'model'=>$searchModel,
+                    'type' => DatePicker::TYPE_COMPONENT_APPEND,
+                    'attribute'=>'next_follow_up_date',
+                    'pluginOptions' => [
+                        'autoclose'=>true,
+                        'format' => 'yyyy-mm-dd'
+                    ],
+                ]),
+                'format' => 'html',
+            ],
             //'created_at',
             //'modified_at',
 
