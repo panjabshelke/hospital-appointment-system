@@ -111,6 +111,8 @@ class PatientAppointmentDetailsController extends Controller
         $model = $this->findModel($id); //->delete() Confirmed
         if (!empty($model) && isset($model->status) && $model->status == "Confirmed") {
             PatientAppointmentDetails::updateAll(['status' => 'Available', 'patient_name' => null, 'patient_contact_no' => null, 'booking_status' => 'No', 'patient_email' => null], 'id = ' . $id);
+            $userModel = new User();
+            $userModel->sendAppointmentMail($model, true);
             Yii::$app->session->setFlash('success', "Patient appointment cancelled successfully.");
         } else if (!empty($model)) {
             PatientAppointmentDetails::updateAll(['status' => 'Cancelled'], 'id = ' . $id);
@@ -143,6 +145,7 @@ class PatientAppointmentDetailsController extends Controller
         if (!empty($model) && isset($model->status) && $model->status == 'Pending') {
             PatientAppointmentDetails::updateAll(['status' => 'Confirmed'], 'id = ' . $id);
             $userModel = new User();
+            $model = $this->findModel($id);
             $userModel->sendAppointmentMail($model);
             Yii::$app->session->setFlash('success', "Patient appointment confirmed successfully.");
         } else {
