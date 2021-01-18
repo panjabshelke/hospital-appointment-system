@@ -1,7 +1,9 @@
 <?php
+
 namespace frontend\controllers;
 
 use backend\models\CategoryMaster;
+use backend\models\DoctorAvailability;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
@@ -87,19 +89,21 @@ class SiteController extends Controller
         $activeDoctors = ArrayHelper::map($allDoctors, 'id', 'category_name');
         $activeBranches = ArrayHelper::map($allBranches, 'id', 'category_name');
         $statusChk = "";
-        
-        if ($model->load(Yii::$app->request->post())) { 
+
+        if ($model->load(Yii::$app->request->post())) {
             $timeSlot = Yii::$app->request->post('book-time-slot');
             $reservationDate = Yii::$app->request->post('reservationDate');
             $reservationDate = date('Y-m-d', strtotime($reservationDate));
             $patientFollowUpDetails = Yii::$app->request->post('PatientFollowUpDetails');
             $model->doctor_name = $patientFollowUpDetails['doctor_name'];
             $model->branch_name = $patientFollowUpDetails['branch_name'];
-            
-            
+
+
             $findTimeSlot = PatientAppointmentDetails::find()
-                            ->where(['id' => $timeSlot, 'available_date' => $reservationDate, 
-                                     'branch_id' => $model->branch_name, 'doctor_id' => $model->doctor_name, 'status' => 'Available'])->one();
+                ->where([
+                    'id' => $timeSlot, 'available_date' => $reservationDate,
+                    'branch_id' => $model->branch_name, 'doctor_id' => $model->doctor_name, 'status' => 'Available'
+                ])->one();
             if (!empty($findTimeSlot)) {
                 $findTimeSlot->patient_name = $model->patient_name;
                 $findTimeSlot->patient_email = $model->patient_email;
@@ -107,7 +111,7 @@ class SiteController extends Controller
                 $findTimeSlot->booking_status = 'Yes';
                 $findTimeSlot->appointment_category = 'First visit';
                 $findTimeSlot->status = 'Pending'; // Confirmed
-                if($findTimeSlot->save()) {
+                if ($findTimeSlot->save()) {
                     $userModel = new User();
                     $userModel->sendAppointmentMail($findTimeSlot);
                     $statusChk = "Success";
@@ -125,18 +129,20 @@ class SiteController extends Controller
             $model->patient_name = Yii::$app->request->post('patient_name');
             $model->patient_email = Yii::$app->request->post('patient_email');
             $model->patient_contact_no = Yii::$app->request->post('patient_contact_no');
-            
+
             $model->branch_name = Yii::$app->request->post('branch_name');
             $model->doctor_name = Yii::$app->request->post('doctor_name');
 
             $timeSlot = Yii::$app->request->post('book-time-slot');
             $reservationDate = Yii::$app->request->post('reservationDatePopup');
             $reservationDate = date('Y-m-d', strtotime($reservationDate));
-            
+
             $findTimeSlot = PatientAppointmentDetails::find()
-                            ->where(['id' => $timeSlot, 'available_date' => $reservationDate, 
-                                     'branch_id' => $model->branch_name, 'doctor_id' => $model->doctor_name, 'status' => 'Available'])->one();
-                                     
+                ->where([
+                    'id' => $timeSlot, 'available_date' => $reservationDate,
+                    'branch_id' => $model->branch_name, 'doctor_id' => $model->doctor_name, 'status' => 'Available'
+                ])->one();
+
             if (!empty($findTimeSlot)) {
                 $findTimeSlot->patient_name = $model->patient_name;
                 $findTimeSlot->patient_email = $model->patient_email;
@@ -144,7 +150,7 @@ class SiteController extends Controller
                 $findTimeSlot->booking_status = 'Yes';
                 $findTimeSlot->appointment_category = 'First visit';
                 $findTimeSlot->status = 'Pending'; // Confirmed
-                if($findTimeSlot->save()) {
+                if ($findTimeSlot->save()) {
                     $statusChk = "Success";
                     $userModel = new User();
                     $userModel->sendAppointmentMail($findTimeSlot);
@@ -160,37 +166,87 @@ class SiteController extends Controller
             }
             return $this->redirect(['index']);
         }
-        
+
         return $this->render('index', [
-                        'model' => $model,
-                        'activeBranches' => $activeBranches,
-                        'activeDoctors' => $activeDoctors,
-                        'statusChk' => $statusChk,
-                        // 'homeDetails' => $pageContain,
-                        // 'testimonialDetail' => $testimonialDetail,
-                    ]);
+            'model' => $model,
+            'activeBranches' => $activeBranches,
+            'activeDoctors' => $activeDoctors,
+            'statusChk' => $statusChk,
+        ]);
     }
 
-    public function actionCollectAvailableSlots() {
+    public function actionCollectAvailableSlots()
+    {
+        /*
+        $branch_id = 5;
+        $doctor_id = 3;
+        echo $reservationDate = date('Y-m-d', strtotime("29-01-2021"));
+        $branchOpenTime = Yii::$app->params['branchOpenTime'];
+        $appointmentTime = Yii::$app->params['appointmentTime'];
+        // $reservationDate 
+        echo "Start time :: " . $createStartTime = $reservationDate . " " . $branchOpenTime;
+        
+
+        $command = Yii::$app->getDb();
+        $sql = 'SELECT * FROM `tbl_doctor_availability` 
+                WHERE ( "' . $createStartTime . '" BETWEEN `available_from` AND `available_upto`) 
+                AND   (`available_upto` > "' . $createStartTime . '") AND `status` = "Approved"';
+
+        $doctorDetails = $command->createCommand($sql)->queryOne();
+        if (!empty($doctorDetails)) {
+            $id = $doctorDetails['id'];
+            $availableUpto = $doctorDetails['available_upto'];
+            $endDate = $reservationDate . " 23:00:00";
+            if (strtotime(date('Y-m-d', strtotime($availableUpto))) == strtotime($reservationDate)) {
+                $endDate = $availableUpto;
+            }
+            $startDate = $reservationDate . " " . $appointmentTime['Morning']['start'] . ":00:00";
+            $appointmentSlotDetails =  PatientAppointmentDetails::splitTime($startDate, $endDate, 20);
+            // splitTime($available_from, $available_upto, "20");
+            $bookedAppointmentDetails = PatientAppointmentDetails::find()
+                ->where(['doctor_availability_id' => $id, 'status' => ['Pending', 'Confirmed', 'Completed']])
+                ->andWhere(['available_date' => $reservationDate])
+                ->all();
+            $availableTimeSlot = [];
+            foreach ($appointmentSlotDetails as $bookedData) {
+                foreach ($bookedData as $slot_type => $slotTimeData) {
+                    foreach ($slotTimeData as $available_time_slot) {
+                        if (!empty($available_time_slot)) {
+                            $availableTimeSlot[$available_time_slot] = $available_time_slot;
+                        }
+                    }
+                }
+            }
+            if (!empty($availableTimeSlot)) {
+                foreach ($bookedAppointmentDetails as $bookedAppointmentData) {
+                    //available_time_slot
+                    if (isset($availableTimeSlot[$bookedAppointmentData['available_time_slot']]))
+                        unset($availableTimeSlot[$bookedAppointmentData['available_time_slot']]);
+                }
+            }
+        }
+        // doctor_availability_id
+        print_r($doctorDetails);
+        die;
+        */
         $status = 'failed';
         $availableTimeSlots = [];
-        if((isset($_POST['branch_id']) && !empty($_POST['branch_id'])) && (isset($_POST['reservationDate']) && !empty($_POST['reservationDate'])) && isset($_POST['doctor_id']) && !empty($_POST['doctor_id'])) {
+        if ((isset($_POST['branch_id']) && !empty($_POST['branch_id'])) && (isset($_POST['reservationDate']) && !empty($_POST['reservationDate'])) && isset($_POST['doctor_id']) && !empty($_POST['doctor_id'])) {
             $branch_id = $_POST['branch_id'];
             $doctor_id = $_POST['doctor_id'];
             $reservationDate = date('Y-m-d', strtotime($_POST['reservationDate']));
             //branch_id doctor_id available_date
             $findAvailableSlots = PatientAppointmentDetails::find()
-                        ->where(['branch_id' => $branch_id, 'doctor_id' => $doctor_id, 'available_date' => $reservationDate])
-                        ->andWhere(['!=', 'status', 'Cancelled'])
-                        ->all();
-                        //->andWhere([ '!=', 'branch_id', $this->branch_id])
+                ->where(['branch_id' => $branch_id, 'doctor_id' => $doctor_id, 'available_date' => $reservationDate])
+                ->andWhere(['!=', 'status', 'Cancelled'])
+                ->all();
+            //->andWhere([ '!=', 'branch_id', $this->branch_id])
             if (!empty($findAvailableSlots)) {
                 foreach ($findAvailableSlots as $availableDetail) {
                     $availableTimeSlots[] = ['id' => $availableDetail->id, 'slot_time' => $availableDetail->available_time_slot, 'booking_status' => $availableDetail->booking_status];
                 }
                 $status = "success";
             }
-            
         }
         return json_encode(['status' => $status, 'outputdata' => $availableTimeSlots]);
     }
@@ -414,5 +470,4 @@ class SiteController extends Controller
             'model' => $model
         ]);
     }
-
 }

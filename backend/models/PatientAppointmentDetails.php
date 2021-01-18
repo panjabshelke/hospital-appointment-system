@@ -141,16 +141,18 @@ class PatientAppointmentDetails extends \yii\db\ActiveRecord
         {
             $date = date("Y-m-d", $StartTime);
             $timeSlot = date("G", $StartTime);
+            $appointmentTime = Yii::$app->params['appointmentTime'];
+            // $startDate = $reservationDate . " " . $appointmentTime['Morning']['start'] . ":00:00";
             //Morning Appointment Slots
-            if ($timeSlot < "12" && $timeSlot >= "09") {
+            if ($timeSlot < $appointmentTime['Morning']['end'] && $timeSlot >= $appointmentTime['Morning']['start']) {
                 $ReturnArray[$date]['Morning'][] = date('h:i A', $StartTime);
             }
             //Afternoon Appointment Slots
-            if ($timeSlot < "14" && $timeSlot >= "12") {
+            if ($timeSlot < $appointmentTime['Afternoon']['end'] && $timeSlot >= $appointmentTime['Afternoon']['start']) {
                 $ReturnArray[$date]['Afternoon'][] = date('h:i A', $StartTime);
             }
             //Evening Appointment Slots
-            if ($timeSlot < "21" && $timeSlot >= "17") {
+            if ($timeSlot < $appointmentTime['Evening']['end'] && $timeSlot >= $appointmentTime['Evening']['start']) {
                 $ReturnArray[$date]['Evening'][] = date("h:i A", $StartTime);
             }
             $StartTime += $AddMins; //Endtime check

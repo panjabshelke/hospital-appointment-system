@@ -67,6 +67,13 @@ if (Yii::$app->controller->action->id === 'login') {
             </audio>
     </div>
     <script type="text/javascript">
+    // setTimeout(function(){
+    //   // $('#player_audio').play;
+    //   $('#player_audio')[0].play();
+    //   // $('#player_audio').get(0).play();
+    //   // $('#player_audio').pause;
+    //   console.log("hi");
+    // }, 3000);
         $(document).ready(function(){ 
             setInterval(function() {      
                 // $('#player_audio')[0].play();

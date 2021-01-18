@@ -30,6 +30,15 @@ autoclose: true,
 startDate: '0d'
 });
 
+$('.datepickerPopup').datepicker({
+  onSelect: function () {
+      $('#reservationDatePopup').value(this.value);
+  },
+format: 'dd-mm-yyyy',
+autoclose: true,
+startDate: '0d'
+});
+
 $('.cell').click(function(){
 $('.cell').removeClass('select');
 $(this).addClass('select');

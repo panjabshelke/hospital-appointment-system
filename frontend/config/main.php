@@ -49,6 +49,7 @@ return [
                 'product/<slug:[A-Za-z0-9 -_.]+>' => 'product/detail',
                 'courses/<slug:[A-Za-z0-9 -_.]+>' => 'courses/detail',
                 'team/<id:\d+>' => 'courses/team-detail',
+                '<action:(.*)>' => 'site/<action>',
             ],
         ],
     ],

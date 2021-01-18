@@ -68,14 +68,14 @@ use yii\helpers\ArrayHelper;
                                     </div>
                                 </div>
                                 <div class="form-group col-sm-12 mb4">
-                                    <div class="datepicker date input-group p-0 col-sm-12">
-                                        <input type="text" placeholder="Choose Appointment date" class="form-control  col-form-label-lg" id="reservationDatePopup" name="reservationDatePopup">
+                                    <div class="input-group datepickerPopup date p-0 col-sm-12">
+                                        <input type="text" placeholder="Choose Appointment date" class="form-control col-form-label-lg" id="reservationDatePopup" name="reservationDatePopup" onchange="getSlotDetails()">
                                         <div class="input-group-append"><span class="input-group-text px-4"><i class="fa fa-calendar"></i></span></div>
                                     </div>
                                 </div>
                                 <div class="form-group mb4">
-                                    <div id="timeslot">
-                                        <h4>Select Time</h4>
+                                    <div id="timeslotPopup" class="hide test">
+                                        <h4 style="font-size: 15px; text-transform: uppercase; background: #17a2b8; padding: 5px; color: #fff; margin:0px;">Select Time</h4>
                                         <div class="timeslotbox">
                                             <div class="mb-2"><span class="mr-1"><i class="fa indicate bg-success"></i> <small>Available Time </small></span><span class="mr-1"><i class="fa indicate bg-primary"></i> <small>Selected </small></span> <span><i class="fa indicate bg-secondary"></i> <small>Not Available Time</small></span></div>
                                             <div id="available-time-slots-div" class=" btn-group-toggle" data-toggle="buttons">
@@ -114,11 +114,11 @@ use yii\helpers\ArrayHelper;
                 <div class="collapse navbar-collapse" id="navmenu">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item active"> <a class="nav-link" href="<?=Yii::getAlias('@root')?>">Home <span class="sr-only">(current)</span></a> </li>
-                        <li class="nav-item"> <a class="nav-link" href="<?=Yii::getAlias('@root') . DIRECTORY_SEPARATOR?>site/about">About Us </a> </li>
-                        <li class="nav-item"> <a class="nav-link" href="<?=Yii::getAlias('@root') . DIRECTORY_SEPARATOR?>site/our-specifications"> Our Specifications </a> </li>
-                        <li class="nav-item"> <a class="nav-link" href="<?=Yii::getAlias('@root') . DIRECTORY_SEPARATOR?>site/our-branches"> Our Branches </a> </li>
-                        <li class="nav-item"> <a class="nav-link " href="<?=Yii::getAlias('@root') . DIRECTORY_SEPARATOR?>site/our-gallery"> Our Gallery </a> </li>
-                        <li class="nav-item"> <a class="nav-link " href="<?=Yii::getAlias('@root') . DIRECTORY_SEPARATOR?>site/contact"> Contact Us</a> </li>
+                        <li class="nav-item"> <a class="nav-link" href="<?=Yii::getAlias('@root') . DIRECTORY_SEPARATOR?>about">About Us </a> </li>
+                        <li class="nav-item"> <a class="nav-link" href="<?=Yii::getAlias('@root') . DIRECTORY_SEPARATOR?>our-specifications"> Our Specifications </a> </li>
+                        <li class="nav-item"> <a class="nav-link" href="<?=Yii::getAlias('@root') . DIRECTORY_SEPARATOR?>our-branches"> Our Branches </a> </li>
+                        <li class="nav-item"> <a class="nav-link " href="<?=Yii::getAlias('@root') . DIRECTORY_SEPARATOR?>our-gallery"> Our Gallery </a> </li>
+                        <li class="nav-item"> <a class="nav-link " href="<?=Yii::getAlias('@root') . DIRECTORY_SEPARATOR?>contact"> Contact Us</a> </li>
                     </ul>
                 </div>
             </div>

@@ -62,12 +62,12 @@
                 </div>
                 <div class="col-sm-4 col-xs-12 col-lg-4 col-md-4">
                  <div class="form-group mb4">
-                                           <?= $form->field($model, 'branch_name')->dropDownList($activeBranches, ['prompt' => '(Select Branch)', 'class'=>'custom-select my-1 mr-sm-2'])->label(false) ?>
+                        <?= $form->field($model, 'branch_name')->dropDownList($activeBranches, ['prompt' => '(Select Branch)', 'class'=>'custom-select my-1 mr-sm-2'])->label(false) ?>
                     </div>
                 </div>
                 <div class="col-sm-4 col-xs-12 col-lg-4 col-md-4">
                  <div class="form-group mb4">
-                                        <?= $form->field($model, 'doctor_name')->dropDownList($activeDoctors, ['prompt' => '(Select Doctor Name)', 'class'=>'custom-select my-1 mr-sm-2'])->label(false) ?>
+                        <?= $form->field($model, 'doctor_name')->dropDownList($activeDoctors, ['prompt' => '(Select Doctor Name)', 'class'=>'custom-select my-1 mr-sm-2'])->label(false) ?>
                     </div>
                 </div>
                  <div class="col-sm-4 col-xs-12 col-lg-4 col-md-4">
@@ -232,7 +232,7 @@ $(document).ready(function(){
         var doctor_id = $("#patientfollowupdetails-doctor_name").val();
         $('#available-time-slots').empty();
         $.ajax({
-            url: '<?php echo Yii::$app->getUrlManager()->createUrl('site/collect-available-slots') ?>',
+            url: '<?php echo Yii::$app->getUrlManager()->createUrl('collect-available-slots') ?>',
             type: 'POST',
             data: {reservationDate: reservationDate, branch_id: branch_id, doctor_id: doctor_id},
             dataType: 'json',
