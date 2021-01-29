@@ -10,4 +10,7 @@ return [
     'admin' => [
         'class' => 'mdm\admin\Module',
     ],
+    'smsApi' => [
+        'class' => 'app\modules\smsApi\SmsApi',
+    ],
 ];

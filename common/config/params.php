@@ -16,4 +16,10 @@ return [
     'branchOpenTime' => '09:00:00',
     'branchCloseTime' => '21:00:00', 
     'appointmentTime' => $appointmentTime,
+    'SMS_API_KEY' => "abcdefghijklmnop",
+    'SMS_API_TOKEN' => "2aabcdefghijklmnop",
+    'SMS_SID' => "EXOSMS",
+    'FAST_SMS_API_KEY' => "eQabcdefghijklmnopabcdefghijklmnop",
+    'FAST_SENDER_ID' => 'SMSINI',
+    'FAST_API_URL' => 'https://www.fast2sms.com/dev/bulk',
 ];
