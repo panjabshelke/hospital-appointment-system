@@ -430,4 +430,167 @@ class User extends ActiveRecord implements IdentityInterface
         } 
         return $status;
     }
+
+    public function sendNextAppointmentMail($userDetails) {
+      $status = false;
+      if (!empty($userDetails)) {
+          
+          $message = '<!DOCTYPE html>
+          <html>
+          <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width">
+          <meta http-equiv="X-UA-Compatible" content="IE=edge">
+          <meta name="x-apple-disable-message-reformatting">
+          <title></title>
+          <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i" rel="stylesheet">
+          </head>
+          <body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #ffffff; font-family:Arial, Helvetica, sans-serif;">
+          <center style="width: 100%; background-color: #f1f1f1;">
+            <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;"> &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp; </div>
+            <div style="max-width: 600px; margin: 0 auto;" class="email-container">
+              <!-- BEGIN BODY -->
+              <table align="center" cellspacing="0" cellpadding="0" border="0" width="100%" align="center" style="margin: auto; background:#ffffff">
+              <tr>
+                <td class="bg_white logo" style="text-align: center">
+                <table  align="center" >
+                    <tr>
+                      <td><h1  style="margin:5px;"><a href="#"><span> <img  src="http://pilesfreeworld.com/img/logo.png" alt="" style="width: 60px; max-width: 600px; height: auto; margin: auto; display: block;"></span></a></h1></td>
+                      <td><span style="    margin-top: 3px;
+              text-transform: uppercase;
+              font-size: 15px;
+              font-weight: bold;
+              color: black;"> PILES FREE</span><span style="    font-size: 15px;
+              font-weight: bold;
+              color: #0984a0;
+              text-transform: uppercase;
+              margin-top: 3px;"> WORLD HOSPITALS</span></td>
+                    
+                    </tr>
+                  </table></td>
+              </tr>
+              <!-- end tr -->
+              <tr>
+                <td valign="middle" class="hero" style="background-image: url(http://pilesfreeworld.com/img/banner1.jpg);    background-size: 100%;
+              height: 200px;
+              background-position: center;
+              background-repeat: no-repeat;
+              width: 100%;"><table  align="center" >
+                    <tr>
+                      <td style="color:#0984a0; font-size:25px;background: rgba(255,255,255,.7);"><p style="margin:0px;">Thanks for choosing</p>
+                        <p style="margin:0px;"> Pilesfree World Hospitals.</p></td>
+                    </tr>
+                  </table></td>
+              </tr>
+              <!-- end tr -->
+              <tr>
+                <td class="bg_white"><table role="presentation" cellspacing="0" cellpadding="10" border="0" width="100%">
+                    <tr>
+                      <td  style="text-align:center;font-family: sans-serif;    font-size: 17px;
+              color: #4f4f4f;
+              margin-top: 0;
+              font-weight: normal;">
+                      ';
+                      
+                          $message .= '<p style="margin:0px">Your Next Appointment On '.$userDetails->next_follow_up_date.'. </p>
+                        <p  style="margin:0px">Please book your appointment before slot gets full, <br/>Below are last appointment details. </p></td>';
+                      
+                      $message .= '</tr>
+                    <!-- end: tr -->
+                    <tr>
+                      <td style=" background:#ffffff" align="center">
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" align="center">
+                          <tr>
+                            <td width="5%"></td>
+                            <td valign="top"><table role="presentation" cellspacing="0" cellpadding="7" border="1" width="100%"   bordercolor="#CCCCCC" style="color:#6c6b6b">
+                                <tr>
+                                  <td style="text-align:right; font-weight:bold" width="30%"> Name : </td>
+                                  <td> '.$userDetails->patient_name.'</td>
+                                </tr>
+                                <tr>
+                                  <td style="text-align:right; font-weight:bold"> Email Address: </td>
+                                  <td>'.$userDetails->patient_email.'</td>
+                                </tr>
+                                <tr>
+                                  <td style="text-align:right; font-weight:bold"> Phone Number: </td>
+                                  <td>'.$userDetails->patient_contact_no.'</td>
+                                </tr>
+                                <tr>
+                                  <td style="text-align:right; font-weight:bold"> Branch: </td>
+                                  <td>'.$userDetails->branch_name.'</td>
+                                </tr>
+                                <tr>
+                                  <td style="text-align:right; font-weight:bold"> Doctor: </td>
+                                  <td>'.$userDetails->doctor_name.'</td>
+                                </tr>
+                                <tr>
+                                  <td style="text-align:right; font-weight:bold"> Appointment Date: </td>
+                                  <td>'.$userDetails->available_date.'</td>
+                                </tr>
+                                <tr>
+                                  <td style="text-align:right; font-weight:bold"> Appointment Time: </td>
+                                  <td>'.$userDetails->available_time_slot.'</td>
+                                </tr>
+                              </table></td>
+                            <td width="5%"></td>
+                          </tr>
+                        </table></td>
+                    </tr>
+                    <!-- end: tr -->
+                  </table></td>
+              </tr>
+              <!-- end:tr -->
+          </table>
+              <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+                <tr>
+                  <td valign="middle" style="background:#ffffff"><table  align="center">
+                      <tr>
+                        <td valign="top" style="padding: 20px;">
+                        <table role="presentation" cellspacing="0" cellpadding="5" border="0" width="100%" style="color:#6c6b6b; ">
+                            <tr>
+                              <td style="text-align: left; padding-left: 5px; padding-right: 5px;font-size:12px;  border-top:2px dotted #ccc">
+                              <h3>Address :</h3>
+                              
+                                2 Plot No. P.A.P. / G. /60,
+                                    Thermax Chowk, Behind Kasturi Market,
+                                    Majjid Road, Sambhaji Nagar,
+                                    Chinchwad, Pune - 411019.
+                               </td>
+                            </tr>
+                            <tr>
+                              <td valign="middle" style="background:#ffffff" >
+                              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                        <tr>
+                                          <td style="text-align: left; font-size:12px;" align="center"><p  style="margin:0px;"><strong>Call:</strong> +91 9112675901 / 7038569384</p></td>
+                                          <td style="text-align: right; font-size:12px;" align="center"><p  style="margin:0px;"><strong> Email : </strong> info@pilesfreeworld.com</p></td>
+                                        </tr>
+                                      </table></td>
+                      </tr>
+                    </table></td>
+                </tr>
+                <!-- end: tr -->
+                <tr>
+                  <td align="center"  bgcolor="#0984a0" valign="middle" style="color:#fff; padding:10px; font-size:12px">&copy; pilesfreeworld 2021</td>
+                </tr>
+              </table>
+            </div>
+          </center>
+          </body>
+          </html>';
+          
+          $userEmail = $userDetails->patient_email;
+          $subject = 'Piles Free World Hospitals: Next Appointment Comming';
+          $response = Yii::$app
+                  ->mailer
+                  ->compose()
+                  ->setFrom(Yii::$app->params['supportEmail'])
+                  ->setTo($userEmail)
+                  ->setSubject($subject)
+                  ->setHtmlBody($message)
+                  ->send();
+          if($response)
+              $status = true;
+      } 
+      return $status;
+  }
 }
